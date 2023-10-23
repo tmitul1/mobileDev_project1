@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import '../expense_item.dart';
 
-class ExpenseData extends ChangeNotifier {
+class ExpenseData extends ChangeNotifier{
+
   List<ExpenseItem> overallExpenseList = [];
 
   List<ExpenseItem> getAllExpenseList() {

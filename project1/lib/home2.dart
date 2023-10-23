@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import '../calcbutton.dart';
 import '../catbutton.dart';
 import '../colors.dart';
+import '../expense_item.dart';
 import '../navbar.dart';
 import '../calcbutton2.dart';
 import '../home.dart';
 import 'package:math_expressions/math_expressions.dart';
+import '../transaction_data.dart';
+import 'package:provider/provider.dart';
 
-// ============== income screen home ==============
 class Home2 extends StatefulWidget {
   const Home2({super.key});
 
@@ -16,35 +19,61 @@ class Home2 extends StatefulWidget {
 }
 
 class _HomeState extends State<Home2> {
-  String equation = "0";
-  String result = "0";
+
+  final _myBox = Hive.box('mybox');
+  
   String expression = "";
+  int id = 100;
+  final int _colorID = 2;
 
   buttonPressed(String buttonText) {
-    setState(() {
+
+  setState(() {
+
       if (buttonText == "<") {
         equation = equation.substring(0, equation.length - 1);
         if (equation == "") {
           equation = "0";
         }
-      } else if (buttonText == "Salary" ||
-          buttonText == "Invest" ||
-          buttonText == "Taxes" ||
-          buttonText == "Wages" ||
-          buttonText == "Revenue") {
+
+      } else if (buttonText == "Salary" || buttonText == "Invest" || buttonText == "Taxes" || buttonText == "Wages" || buttonText == "Revenue") {
+        _myBox.put(100, equation);
+        _myBox.put(200, buttonText);
         expression = equation;
-        expression = expression.replaceAll('x', '*');
+        _myBox.put(id, id - 99);
+        id++;
+
+        if (buttonText == "Salary") {
+          iconImg = const Icon(Icons.wallet_rounded, color: iconWhite, size: 45);
+        }
+        if (buttonText == "Invest") {
+          iconImg = const Icon(Icons.currency_bitcoin_rounded, color: iconWhite, size: 45);
+        }
+        if (buttonText == "Taxes") {
+          iconImg = const Icon(Icons.monetization_on_rounded, color: iconWhite, size: 45);
+        }
+        if (buttonText == "Wages") {
+          iconImg = const Icon(Icons.local_atm_rounded, color: iconWhite, size: 45);
+        }
+        if (buttonText == "Revenue") {
+          iconImg = const Icon(Icons.account_balance_wallet_rounded, color: iconWhite, size: 45);
+        }
+
+        save(buttonText, equation, iconImg, _colorID);
         equation = "0";
 
-        try {
+      try {
           Parser p = Parser();
           Expression exp = p.parse(expression);
+          Expression exp2 = p.parse(result2);
 
           ContextModel cm = ContextModel();
-          result = '${exp.evaluate(EvaluationType.REAL, cm)}';
+          result2 = '${(exp + exp2).evaluate(EvaluationType.REAL, cm)}';
+          _myBox.put(2, result2);
         } catch (e) {
-          result = "Error";
+          result2 = "Error";
         }
+
       } else {
         if (equation == "0") {
           equation = buttonText;
@@ -53,6 +82,10 @@ class _HomeState extends State<Home2> {
         }
       }
     });
+}
+void save(String buttonText, String equation, Icon iconImg, int _colorID) {
+    ExpenseItem newExpense = ExpenseItem(category: buttonText, amount: equation, img: iconImg, colorID: _colorID);
+    Provider.of<ExpenseData>(context, listen: false).addNewExpense(newExpense);
   }
 
   @override
@@ -77,21 +110,20 @@ class _HomeState extends State<Home2> {
                   borderRadius: BorderRadius.circular(20),
                   color: bgLightGrey,
                 ),
-                alignment: Alignment.bottomCenter,
-                padding: const EdgeInsets.only(bottom: 10),
+                alignment: Alignment.center,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      Text(
-                        '\$ ',
-                        style: TextStyle(
-                            color: equation == '0' ? bgDarkGrey : homeGreen,
-                            fontSize: 25),
+                      Text('\$',
+                      style: TextStyle(
+                        color: equation == '0' ? bgDarkGrey : homeGreen, fontSize: 40
+                        ),
                       ),
-                      Text(
-                        equation,
-                        style: TextStyle(color: iconWhite, fontSize: 40),
+                      Text(equation,
+                      style: const TextStyle(
+                        color: iconWhite, fontSize: 40
+                      ),
                       ),
                     ],
                   ),
@@ -127,20 +159,19 @@ class _HomeState extends State<Home2> {
                 height: 60,
                 padding: const EdgeInsets.all(0),
                 child: ElevatedButton(
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Home()),
-                  ),
+                  onPressed: () => 
+                  Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const Home()),
+                  ), 
                   style: ElevatedButton.styleFrom(
-                      shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(40))),
-                      backgroundColor: homeRed),
-                  child: const Text(
-                    '\$',
-                    style: const TextStyle(fontSize: 27, color: Colors.white),
-                  ),
-                ),
-              ),
+                  shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(40))),
+                  backgroundColor: homeRed),
+                    child: const Text('\$',
+                      style: const TextStyle(fontSize: 27, color: Colors.white),
+        ),
+      ), 
+    ),
               calcButton('4', bgLightGrey, () => buttonPressed('4')),
               calcButton('5', bgLightGrey, () => buttonPressed('5')),
               calcButton('6', bgLightGrey, () => buttonPressed('6')),
@@ -149,20 +180,19 @@ class _HomeState extends State<Home2> {
                 height: 60,
                 padding: const EdgeInsets.all(0),
                 child: ElevatedButton(
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Home2()),
-                  ),
+                  onPressed: () => 
+                  Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const Home2()),
+                  ), 
                   style: ElevatedButton.styleFrom(
-                      shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(40))),
-                      backgroundColor: homeGreen),
-                  child: const Text(
-                    '\$',
-                    style: const TextStyle(fontSize: 27, color: Colors.white),
-                  ),
-                ),
-              ),
+                  shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(40))),
+                  backgroundColor: homeGreen),
+                    child: const Text('\$',
+                      style: const TextStyle(fontSize: 27, color: Colors.white),
+        ),
+      ), 
+    ),
             ],
           ),
           const SizedBox(
@@ -212,14 +242,10 @@ class _HomeState extends State<Home2> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              catButton('Salary', Icon(Icons.wallet_rounded), bgLightGrey,
-                  () => buttonPressed('Salary')),
-              catButton('Invest', Icon(Icons.currency_bitcoin_rounded),
-                  bgLightGrey, () => buttonPressed('Invest')),
-              catButton('Taxes', Icon(Icons.monetization_on_rounded),
-                  bgLightGrey, () => buttonPressed('Taxes')),
-              catButton('Wages', Icon(Icons.local_atm_rounded), bgLightGrey,
-                  () => buttonPressed('Wages')),
+              catButton('Salary', const Icon(Icons.wallet_rounded), bgLightGrey, () => buttonPressed('Salary')),
+              catButton('Invest', const Icon(Icons.currency_bitcoin_rounded), bgLightGrey, () => buttonPressed('Invest')),
+              catButton('Taxes', const Icon(Icons.monetization_on_rounded), bgLightGrey, () => buttonPressed('Taxes')),
+              catButton('Wages', const Icon(Icons.local_atm_rounded), bgLightGrey, () => buttonPressed('Wages')),
             ],
           ),
           const SizedBox(
@@ -229,18 +255,21 @@ class _HomeState extends State<Home2> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              catButton('Revenue', Icon(Icons.account_balance_wallet_rounded),
-                  bgLightGrey, () => buttonPressed('Revenue')),
+              catButton('Revenue', const Icon(Icons.account_balance_wallet_rounded), bgLightGrey, () => buttonPressed('Revenue')),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             width: double.infinity,
             height: 10,
           ),
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text(result),
+              Text('INCOME MODE',
+              style: TextStyle(
+                color: homeGreen, fontSize: 20
+              ),
+              ),
             ],
           ),
         ],

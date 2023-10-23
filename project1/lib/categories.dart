@@ -44,6 +44,9 @@ class _CategoriesState extends State<Categories> {
       backgroundColor: bgDarkGrey,
       body: Column(
         children: [
+          SizedBox(
+            height: 40,
+          ),
           Container(
             width: 200,
             height: 200,
@@ -52,33 +55,56 @@ class _CategoriesState extends State<Categories> {
                 sections: [
                   PieChartSectionData(
                     color: const Color(0xff0293ee), // Color for the section.
-                    value: 20, // Value for the section.
-                    title: 'Clothes', // Title for the section.
+                    value:
+                        double.parse(groceriesTotal), // Value for the section.
+                    title: 'Groceries', // Title for the section.
                     radius: 50, // Adjust the radius as needed.
                   ),
                   PieChartSectionData(
                     color: const Color(0xfff8b250), // Color for the section.
-                    value: 20, // Value for the section.
-                    title: 'Gas', // Title for the section.
+                    value: double.parse(takeoutTotal), // Value for the section.
+                    title: 'Take-Out', // Title for the section.
                     radius: 50, // Adjust the radius as needed.
                   ),
                   PieChartSectionData(
                     color: const Color(0xff845bef), // Color for the section.
-                    value: 30, // Value for the section.
-                    title: 'Phone', // Title for the section.
+                    value: double.parse(clothesTotal), // Value for the section.
+                    title: 'Clothes', // Title for the section.
                     radius: 50, // Adjust the radius as needed.
                   ),
                   PieChartSectionData(
                     color: Color.fromARGB(
                         255, 239, 91, 182), // Color for the section.
-                    value: 50, // Value for the section.
+                    value:
+                        double.parse(relaxationTotal), // Value for the section.
+                    title: 'Relax', // Title for the section.
+                    radius: 50, // Adjust the radius as needed.
+                  ),
+                  PieChartSectionData(
+                    color: Color.fromARGB(
+                        255, 91, 239, 158), // Color for the section.
+                    value: double.parse(gasTotal), // Value for the section.
+                    title: 'Gas', // Title for the section.
+                    radius: 50, // Adjust the radius as needed.
+                  ),
+                  PieChartSectionData(
+                    color: Color.fromARGB(
+                        255, 91, 239, 158), // Color for the section.
+                    value: double.parse(phoneTotal), // Value for the section.
+                    title: 'Phone', // Title for the section.
+                    radius: 50, // Adjust the radius as needed.
+                  ),
+                  PieChartSectionData(
+                    color: Color.fromARGB(
+                        255, 91, 239, 158), // Color for the section.
+                    value: double.parse(houseTotal), // Value for the section.
                     title: 'House', // Title for the section.
                     radius: 50, // Adjust the radius as needed.
                   ),
                   PieChartSectionData(
                     color: Color.fromARGB(
                         255, 91, 239, 158), // Color for the section.
-                    value: 50, // Value for the section.
+                    value: double.parse(carTotal), // Value for the section.
                     title: 'Car', // Title for the section.
                     radius: 50, // Adjust the radius as needed.
                   ),

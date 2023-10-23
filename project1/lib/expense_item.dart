@@ -4,6 +4,6 @@ class ExpenseItem {
   final String category;
   final String amount;
   final Icon img;
-  ExpenseItem(
-      {required this.category, required this.amount, required this.img});
+  final int colorID;
+  ExpenseItem({required this.category, required this.amount, required this.img, required this.colorID});
 }

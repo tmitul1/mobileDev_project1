@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import '../calcbutton.dart';
@@ -12,36 +13,31 @@ import '../transaction_data.dart';
 import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+const Home({super.key});
 
   @override
   State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
+
   final _myBox = Hive.box('mybox');
 
-  String equation = "0";
-  String result = "0";
   String expression = "";
   int id = 100;
-  Icon iconImg = Icon(Icons.abc);
+  final int _colorID = 1;
 
   buttonPressed(String buttonText) {
-    setState(() {
+
+  setState(() {
+
       if (buttonText == "<") {
         equation = equation.substring(0, equation.length - 1);
         if (equation == "") {
           equation = "0";
         }
-      } else if (buttonText == "Groceries" ||
-          buttonText == "Take-Out" ||
-          buttonText == "Clothes" ||
-          buttonText == "Relaxation" ||
-          buttonText == "Gas" ||
-          buttonText == "Phone" ||
-          buttonText == "House" ||
-          buttonText == "Car") {
+
+      } else if (buttonText == "Groceries" || buttonText == "Take-Out" || buttonText == "Clothes" || buttonText == "Relaxation" || buttonText == "Gas" || buttonText == "Phone" || buttonText == "House" || buttonText == "Car") {
         _myBox.put(100, equation);
         _myBox.put(200, buttonText);
         expression = equation;
@@ -49,32 +45,112 @@ class _HomeState extends State<Home> {
         id++;
 
         if (buttonText == "Groceries") {
-          iconImg = Icon(Icons.local_grocery_store_rounded);
+          iconImg = const Icon(Icons.local_grocery_store_rounded, color: iconWhite, size: 45);
+          try {
+          Parser p = Parser();
+          Expression exp = p.parse(groceriesTotal);
+          Expression exp2 = p.parse(equation);
+
+          ContextModel cm = ContextModel();
+          groceriesTotal = '${(exp + exp2).evaluate(EvaluationType.REAL, cm)}';
+        } catch (e) {
+          result = "Error";
+        }
         }
         if (buttonText == "Take-Out") {
-          iconImg = Icon(Icons.local_dining_rounded);
+          iconImg = const Icon(Icons.local_dining_rounded, color: iconWhite, size: 45);
+          try {
+          Parser p = Parser();
+          Expression exp = p.parse(takeoutTotal);
+          Expression exp2 = p.parse(equation);
+
+          ContextModel cm = ContextModel();
+          takeoutTotal = '${(exp + exp2).evaluate(EvaluationType.REAL, cm)}';
+        } catch (e) {
+          result = "Error";
+        }
         }
         if (buttonText == "Clothes") {
-          iconImg = Icon(Icons.local_mall_rounded);
+          iconImg = const Icon(Icons.local_mall_rounded, color: iconWhite, size: 45);
+          try {
+          Parser p = Parser();
+          Expression exp = p.parse(clothesTotal);
+          Expression exp2 = p.parse(equation);
+
+          ContextModel cm = ContextModel();
+          clothesTotal = '${(exp + exp2).evaluate(EvaluationType.REAL, cm)}';
+        } catch (e) {
+          result = "Error";
+        }
         }
         if (buttonText == "Relaxation") {
-          iconImg = Icon(Icons.spa_rounded);
+          iconImg = const Icon(Icons.spa_rounded, color: iconWhite, size: 45);
+          try {
+          Parser p = Parser();
+          Expression exp = p.parse(relaxationTotal);
+          Expression exp2 = p.parse(equation);
+
+          ContextModel cm = ContextModel();
+          relaxationTotal = '${(exp + exp2).evaluate(EvaluationType.REAL, cm)}';
+        } catch (e) {
+          result = "Error";
+        }
         }
         if (buttonText == "Gas") {
-          iconImg = Icon(Icons.local_gas_station_rounded);
+          iconImg = const Icon(Icons.local_gas_station_rounded, color: iconWhite, size: 45);
+          try {
+          Parser p = Parser();
+          Expression exp = p.parse(gasTotal);
+          Expression exp2 = p.parse(equation);
+
+          ContextModel cm = ContextModel();
+          gasTotal = '${(exp + exp2).evaluate(EvaluationType.REAL, cm)}';
+        } catch (e) {
+          result = "Error";
+        }
         }
         if (buttonText == "Phone") {
-          iconImg = Icon(Icons.phone_android_rounded);
+          iconImg = const Icon(Icons.phone_android_rounded, color: iconWhite, size: 45);
+          try {
+          Parser p = Parser();
+          Expression exp = p.parse(phoneTotal);
+          Expression exp2 = p.parse(equation);
+
+          ContextModel cm = ContextModel();
+          phoneTotal = '${(exp + exp2).evaluate(EvaluationType.REAL, cm)}';
+        } catch (e) {
+          result = "Error";
+        }
         }
         if (buttonText == "House") {
-          iconImg = Icon(Icons.holiday_village_rounded);
+          iconImg = const Icon(Icons.holiday_village_rounded, color: iconWhite, size: 45);
+          try {
+          Parser p = Parser();
+          Expression exp = p.parse(houseTotal);
+          Expression exp2 = p.parse(equation);
+
+          ContextModel cm = ContextModel();
+          houseTotal = '${(exp + exp2).evaluate(EvaluationType.REAL, cm)}';
+        } catch (e) {
+          result = "Error";
+        }
         }
         if (buttonText == "Car") {
-          iconImg = Icon(Icons.local_car_wash_rounded);
+          iconImg = const Icon(Icons.local_car_wash_rounded, color: iconWhite, size: 45);
+          try {
+          Parser p = Parser();
+          Expression exp = p.parse(carTotal);
+          Expression exp2 = p.parse(equation);
+
+          ContextModel cm = ContextModel();
+          carTotal = '${(exp + exp2).evaluate(EvaluationType.REAL, cm)}';
+        } catch (e) {
+          result = "Error";
         }
-        save(buttonText, equation, iconImg);
+        }
+        save(buttonText, equation, iconImg, _colorID);
         equation = "0";
-        try {
+      try {
           Parser p = Parser();
           Expression exp = p.parse(expression);
           Expression exp2 = p.parse(result);
@@ -93,11 +169,10 @@ class _HomeState extends State<Home> {
         }
       }
     });
-  }
+}
 
-  void save(String buttonText, String equation, Icon iconImg) {
-    ExpenseItem newExpense =
-        ExpenseItem(category: buttonText, amount: equation, img: iconImg);
+  void save(String buttonText, String equation, Icon iconImg, int _colorID) {
+    ExpenseItem newExpense = ExpenseItem(category: buttonText, amount: equation, img: iconImg, colorID: _colorID);
     Provider.of<ExpenseData>(context, listen: false).addNewExpense(newExpense);
   }
 
@@ -123,21 +198,20 @@ class _HomeState extends State<Home> {
                   borderRadius: BorderRadius.circular(20),
                   color: bgLightGrey,
                 ),
-                alignment: Alignment.bottomCenter,
-                padding: const EdgeInsets.only(bottom: 10),
+                alignment: Alignment.center,
                 child: SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      Text(
-                        '\$ ',
-                        style: TextStyle(
-                            color: equation == '0' ? bgDarkGrey : homeRed,
-                            fontSize: 25),
+                      Text('\$',
+                      style: TextStyle(
+                        color: equation == '0' ? bgDarkGrey : homeRed, fontSize: 40
+                        ),
                       ),
-                      Text(
-                        equation,
-                        style: TextStyle(color: iconWhite, fontSize: 40),
+                      Text(equation,
+                      style: const TextStyle(
+                        color: iconWhite, fontSize: 40
+                      ),
                       ),
                     ],
                   ),
@@ -173,20 +247,19 @@ class _HomeState extends State<Home> {
                 height: 60,
                 padding: const EdgeInsets.all(0),
                 child: ElevatedButton(
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Home()),
-                  ),
+                  onPressed: () => 
+                  Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const Home()),
+                  ), 
                   style: ElevatedButton.styleFrom(
-                      shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(40))),
-                      backgroundColor: homeRed),
-                  child: const Text(
-                    '\$',
-                    style: const TextStyle(fontSize: 27, color: Colors.white),
-                  ),
-                ),
-              ),
+                  shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(40))),
+                  backgroundColor: homeRed),
+                    child: const Text('\$',
+                      style: TextStyle(fontSize: 27, color: Colors.white),
+        ),
+      ), 
+    ),
               calcButton('4', bgLightGrey, () => buttonPressed('4')),
               calcButton('5', bgLightGrey, () => buttonPressed('5')),
               calcButton('6', bgLightGrey, () => buttonPressed('6')),
@@ -195,20 +268,19 @@ class _HomeState extends State<Home> {
                 height: 60,
                 padding: const EdgeInsets.all(0),
                 child: ElevatedButton(
-                  onPressed: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => Home2()),
-                  ),
+                  onPressed: () => 
+                  Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => const Home2()),
+                  ), 
                   style: ElevatedButton.styleFrom(
-                      shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(40))),
-                      backgroundColor: homeGreen),
-                  child: const Text(
-                    '\$',
-                    style: const TextStyle(fontSize: 27, color: Colors.white),
-                  ),
-                ),
-              ),
+                  shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(40))),
+                  backgroundColor: homeGreen),
+                    child: const Text('\$',
+                      style: TextStyle(fontSize: 27, color: Colors.white),
+        ),
+      ), 
+    ),
             ],
           ),
           const SizedBox(
@@ -258,14 +330,10 @@ class _HomeState extends State<Home> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              catButton('Groceries', Icon(Icons.local_grocery_store_rounded),
-                  bgLightGrey, () => buttonPressed('Groceries')),
-              catButton('Take-Out', Icon(Icons.local_dining_rounded),
-                  bgLightGrey, () => buttonPressed('Take-Out')),
-              catButton('Clothes', Icon(Icons.local_mall_rounded), bgLightGrey,
-                  () => buttonPressed('Clothes')),
-              catButton('Relaxation', Icon(Icons.spa_rounded), bgLightGrey,
-                  () => buttonPressed('Relaxation')),
+              catButton('Groceries', const Icon(Icons.local_grocery_store_rounded), bgLightGrey, () => buttonPressed('Groceries')),
+              catButton('Take-Out', const Icon(Icons.local_dining_rounded), bgLightGrey, () => buttonPressed('Take-Out')),
+              catButton('Clothes', const Icon(Icons.local_mall_rounded), bgLightGrey, () => buttonPressed('Clothes')),
+              catButton('Relax', const Icon(Icons.spa_rounded), bgLightGrey, () => buttonPressed('Relaxation')),
             ],
           ),
           const SizedBox(
@@ -275,24 +343,24 @@ class _HomeState extends State<Home> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              catButton('Gas', Icon(Icons.local_gas_station_rounded),
-                  bgLightGrey, () => buttonPressed('Gas')),
-              catButton('Phone', Icon(Icons.phone_android_rounded), bgLightGrey,
-                  () => buttonPressed('Phone')),
-              catButton('House', Icon(Icons.holiday_village_rounded),
-                  bgLightGrey, () => buttonPressed('House')),
-              catButton('Car', Icon(Icons.local_car_wash_rounded), bgLightGrey,
-                  () => buttonPressed('Car')),
+              catButton('Gas', const Icon(Icons.local_gas_station_rounded), bgLightGrey, () => buttonPressed('Gas')),
+              catButton('Phone', const Icon(Icons.phone_android_rounded), bgLightGrey, () => buttonPressed('Phone')),
+              catButton('House', const Icon(Icons.holiday_village_rounded), bgLightGrey, () => buttonPressed('House')),
+              catButton('Car', const Icon(Icons.local_car_wash_rounded), bgLightGrey, () => buttonPressed('Car')),
             ],
           ),
-          SizedBox(
+          const SizedBox(
             width: double.infinity,
             height: 10,
           ),
-          Row(
+          const Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              Text(result),
+              Text('EXPENSE MODE',
+              style: TextStyle(
+                color: homeRed, fontSize: 20
+              ),
+              ),
             ],
           ),
         ],
@@ -323,3 +391,4 @@ class gNavContainer extends StatelessWidget {
     );
   }
 }
+ 

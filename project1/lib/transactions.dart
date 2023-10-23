@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import '../navbar.dart';
 import '../colors.dart';
 import '../transaction_data.dart';
 import 'package:provider/provider.dart';
 
 class Transactions extends StatefulWidget {
-  const Transactions({
-    super.key,
-  });
+  const Transactions({super.key,});
 
   @override
   State<Transactions> createState() => _TransactionsState();
+
 }
 
-class _TransactionsState extends State<Transactions> {
-  final _myBox = Hive.box('mybox');
+class _TransactionsState extends State<Transactions>{
   int id = 100;
 
   @override
@@ -24,7 +21,7 @@ class _TransactionsState extends State<Transactions> {
       backgroundColor: bgDarkGrey,
       body: Column(
         children: <Widget>[
-          SizedBox(
+          const SizedBox(
             width: double.infinity,
             height: 30,
           ),
@@ -32,80 +29,80 @@ class _TransactionsState extends State<Transactions> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                padding: EdgeInsets.all(5),
+                padding: const EdgeInsets.all(5),
                 width: MediaQuery.of(context).size.width * 0.5,
-                height: 50,
+                height: 60,
                 color: homeRed,
                 child: Center(
-                  child: Text(
-                    _myBox.get(1),
-                    style: TextStyle(color: iconWhite, fontSize: 30),
-                  ),
+                  child: Text(result,
+                    style: const TextStyle(color: iconWhite, fontSize: 30),
+                    ),
                 ),
               ),
               Container(
-                padding: EdgeInsets.all(5),
+                padding: const EdgeInsets.all(5),
                 width: MediaQuery.of(context).size.width * 0.5,
-                height: 50,
+                height: 60,
                 color: homeGreen,
                 child: Center(
-                  child: Text(
-                    'vuvuvg',
-                    style: TextStyle(color: iconWhite, fontSize: 30),
-                  ),
+                  child: Text(result2,
+                    style: const TextStyle(color: iconWhite, fontSize: 30),
+                    ),
                 ),
               ),
             ],
           ),
-          Consumer<ExpenseData>(
-            builder: (context, value, child) => Container(
-              margin: EdgeInsets.all(30),
-              width: double.infinity,
-              height: 500,
-              color: Colors.blue,
-              child: ListView.builder(
-                itemCount: value.getAllExpenseList().length,
-                itemBuilder: (context, index) => ListTile(
-                  leading: value.getAllExpenseList()[index].img,
-                  title: Text(value.getAllExpenseList()[index].category),
-                  trailing: Text(value.getAllExpenseList()[index].amount),
-                  tileColor: bgLightGrey,
+              Consumer<ExpenseData>(
+                builder:(context, value, child) => Container(
+                  margin: const EdgeInsets.only(left: 30, right: 30),
+                  width: 400,
+                  height: 624,
+                  child: ListView.builder(
+                    itemCount: value.getAllExpenseList().length,
+                    itemBuilder: (context, index) =>
+                      Container(
+                        height: 60,
+                        margin: const EdgeInsets.only(bottom:25),
+                        
+                        decoration: BoxDecoration(
+                          color: bgLightGrey,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            const SizedBox(
+                              width: 30,
+                              height: double.infinity,
+                            ),
+                            value.getAllExpenseList()[index].img,        
+                            Container(
+                              margin: const EdgeInsets.only(left: 5),
+                              width: 190,
+                              child: Text(value.getAllExpenseList()[index].category,
+                              style: const TextStyle(
+                                fontSize: 30,
+                                color: iconWhite,
+                              ),),
+                            ),
+                            Text(value.getAllExpenseList()[index].amount,
+                            textAlign: TextAlign.end,
+                            style: TextStyle(
+                              color: value.getAllExpenseList()[index].colorID == 1 ? homeRed : homeGreen,
+                              fontSize: 30,
+                              
+                              ),
+                            ),
+                            ],
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ),
+              
         ],
       ),
-      bottomNavigationBar: gNavContainer(),
-    );
-  }
-}
-
-class transTile extends StatelessWidget {
-  const transTile({
-    super.key,
-    required Box myBox,
-  }) : _myBox = myBox;
-
-  final Box _myBox;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.all(15),
-      width: 400,
-      height: 50,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(5),
-        color: bgLightGrey,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(_myBox.get(11)),
-          Text(_myBox.get(10)),
-        ],
-      ),
+      bottomNavigationBar: const gNavContainer(),
     );
   }
 }

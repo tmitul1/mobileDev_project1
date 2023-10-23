@@ -5,6 +5,7 @@ import '../transaction_data.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
+
   // initialize hive
   await Hive.initFlutter();
 
@@ -23,9 +24,10 @@ class MyApp extends StatelessWidget {
       create: (context) => ExpenseData(),
       builder: (context, child) => const MaterialApp(
         title: "p1",
-        debugShowCheckedModeBanner: false,
-        home: Home(),
-      ),
-    );
+          debugShowCheckedModeBanner: false,
+          home: Home(),
+        ),
+    ); 
   }
 }
+

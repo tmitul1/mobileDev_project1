@@ -7,6 +7,7 @@ import '../calcbutton2.dart';
 import '../home.dart';
 import 'package:math_expressions/math_expressions.dart';
 
+// ============== income screen home ==============
 class Home2 extends StatefulWidget {
   const Home2({super.key});
 
@@ -83,10 +84,10 @@ class _HomeState extends State<Home2> {
                   child: Row(
                     children: [
                       Text(
-                        '\$',
+                        '\$ ',
                         style: TextStyle(
                             color: equation == '0' ? bgDarkGrey : homeGreen,
-                            fontSize: 40),
+                            fontSize: 25),
                       ),
                       Text(
                         equation,

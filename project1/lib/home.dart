@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import '../calcbutton.dart';
 import '../catbutton.dart';
 import '../colors.dart';
+import '../expense_item.dart';
 import '../navbar.dart';
 import '../calcbutton2.dart';
 import '../home2.dart';
 import 'package:math_expressions/math_expressions.dart';
+import '../transaction_data.dart';
+import 'package:provider/provider.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -15,9 +19,13 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final _myBox = Hive.box('mybox');
+
   String equation = "0";
   String result = "0";
   String expression = "";
+  int id = 100;
+  Icon iconImg = Icon(Icons.abc);
 
   buttonPressed(String buttonText) {
     setState(() {
@@ -34,16 +42,46 @@ class _HomeState extends State<Home> {
           buttonText == "Phone" ||
           buttonText == "House" ||
           buttonText == "Car") {
+        _myBox.put(100, equation);
+        _myBox.put(200, buttonText);
         expression = equation;
-        expression = expression.replaceAll('x', '*');
-        equation = "0";
+        _myBox.put(id, id - 99);
+        id++;
 
+        if (buttonText == "Groceries") {
+          iconImg = Icon(Icons.local_grocery_store_rounded);
+        }
+        if (buttonText == "Take-Out") {
+          iconImg = Icon(Icons.local_dining_rounded);
+        }
+        if (buttonText == "Clothes") {
+          iconImg = Icon(Icons.local_mall_rounded);
+        }
+        if (buttonText == "Relaxation") {
+          iconImg = Icon(Icons.spa_rounded);
+        }
+        if (buttonText == "Gas") {
+          iconImg = Icon(Icons.local_gas_station_rounded);
+        }
+        if (buttonText == "Phone") {
+          iconImg = Icon(Icons.phone_android_rounded);
+        }
+        if (buttonText == "House") {
+          iconImg = Icon(Icons.holiday_village_rounded);
+        }
+        if (buttonText == "Car") {
+          iconImg = Icon(Icons.local_car_wash_rounded);
+        }
+        save(buttonText, equation, iconImg);
+        equation = "0";
         try {
           Parser p = Parser();
           Expression exp = p.parse(expression);
+          Expression exp2 = p.parse(result);
 
           ContextModel cm = ContextModel();
-          result = '${exp.evaluate(EvaluationType.REAL, cm)}';
+          result = '${(exp + exp2).evaluate(EvaluationType.REAL, cm)}';
+          _myBox.put(1, result);
         } catch (e) {
           result = "Error";
         }
@@ -55,6 +93,12 @@ class _HomeState extends State<Home> {
         }
       }
     });
+  }
+
+  void save(String buttonText, String equation, Icon iconImg) {
+    ExpenseItem newExpense =
+        ExpenseItem(category: buttonText, amount: equation, img: iconImg);
+    Provider.of<ExpenseData>(context, listen: false).addNewExpense(newExpense);
   }
 
   @override
@@ -86,10 +130,10 @@ class _HomeState extends State<Home> {
                   child: Row(
                     children: [
                       Text(
-                        '\$',
+                        '\$ ',
                         style: TextStyle(
                             color: equation == '0' ? bgDarkGrey : homeRed,
-                            fontSize: 40),
+                            fontSize: 25),
                       ),
                       Text(
                         equation,

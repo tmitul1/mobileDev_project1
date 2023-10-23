@@ -89,21 +89,21 @@ class _CategoriesState extends State<Categories> {
                   ),
                   PieChartSectionData(
                     color: Color.fromARGB(
-                        255, 91, 239, 158), // Color for the section.
+                        255, 76, 150, 248), // Color for the section.
                     value: double.parse(phoneTotal), // Value for the section.
                     title: 'Phone', // Title for the section.
                     radius: 50, // Adjust the radius as needed.
                   ),
                   PieChartSectionData(
                     color: Color.fromARGB(
-                        255, 91, 239, 158), // Color for the section.
+                        255, 240, 83, 83), // Color for the section.
                     value: double.parse(houseTotal), // Value for the section.
                     title: 'House', // Title for the section.
                     radius: 50, // Adjust the radius as needed.
                   ),
                   PieChartSectionData(
                     color: Color.fromARGB(
-                        255, 91, 239, 158), // Color for the section.
+                        255, 236, 187, 82), // Color for the section.
                     value: double.parse(carTotal), // Value for the section.
                     title: 'Car', // Title for the section.
                     radius: 50, // Adjust the radius as needed.
